@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر لمسة وردية | هدايا الجزائر المميزة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-pink: #ffc1e3;
+            --dark-pink: #e91e63;
+            --bg-color: #fffafc;
+            --white: #ffffff;
+            --testimonial-bg: #fff5f8; /* لون وردي ناعم جداً للخلفية */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-color); color: #333; scroll-behavior: smooth; }
+
+        header {
+            background: var(--white); padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 1.6rem; font-weight: bold; color: var(--dark-pink); }
+        .cart-btn { position: relative; cursor: pointer; font-size: 1.6rem; color: var(--dark-pink); border: none; background: none; }
+        .cart-count {
+            position: absolute; top: -5px; right: -10px;
+            background: var(--dark-pink); color: white; border-radius: 50%; padding: 2px 7px; font-size: 0.75rem;
+        }
+
+        .hero {
+            height: 50vh; background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=1200');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
+
+        .products-section { padding: 50px 5%; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .card { background: white; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid var(--primary-pink); }
+        .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; }
+        .add-btn { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 30px; cursor: pointer; width: 100%; font-weight: bold; }
+
+        /* تحسين قسم آراء الزبائن */
+        .testimonials { padding: 60px 5%; background: var(--white); text-align: center; }
+        .testimonials h2 { color: var(--dark-pink); margin-bottom: 30px; }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .test-card { 
+            background: var(--testimonial-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            border-right: 5px solid var(--dark-pink); /* حافة جانبية تعطي شكل جمالي */
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.05);
+        }
+        .test-card p { font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 10px; font-weight: 500; }
+        .test-card strong { color: var(--dark-pink); font-size: 0.9rem; }
+
+        /* تذييل الصفحة */
+        footer { background: var(--white); padding: 40px 5%; text-align: center; border-top: 1px solid var(--primary-pink); }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .social-links a { 
+            width: 45px; height: 45px; background: var(--bg-color); 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; color: var(--dark-pink); font-size: 1.3rem;
+            text-decoration: none; transition: 0.3s; border: 1px solid var(--primary-pink);
+        }
+        .social-links a:hover { background: var(--dark-pink); color: white; transform: translateY(-3px); }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: white; width: 95%; max-width: 550px; padding: 30px;
+            border-radius: 20px; max-height: 90vh; overflow-y: auto; position: relative;
+        }
+        .close-modal { position: absolute; left: 20px; top: 20px; font-size: 1.5rem; cursor: pointer; }
+
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; text-align: right; }
+        .form-group label { font-weight: bold; font-size: 0.9rem; }
+        .form-group input, .form-group select { padding: 12px; border: 1.5px solid #eee; border-radius: 10px; outline: none; }
+
+        .order-summary { background: #fff0f5; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .total-line { display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--dark-pink); }
+        
+        .submit-order { background: #28a745; color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; }
+        .submit-order:disabled { background: #ccc; cursor: not-allowed; }
+        .not-available { color: red; font-weight: bold; font-size: 0.8rem; display: none; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">لمسة وردية</div>
+        <button class="cart-btn" onclick="openCart()">
+            <i class="fas fa-shopping-basket"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </header>
+
+    <section class="hero">
+        <h1>أجمل الهدايا لجميع الولايات</h1>
+        <button class="add-btn" style="width: auto; padding: 10px 30px;" onclick="window.scrollTo(0, 600)">تسوق الآن</button>
+    </section>
+
+    <section class="products-section">
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <section class="testimonials">
+        <h2>آراء زبائننا المبدعين</h2>
+        <div class="test-grid">
+            <div class="test-card">
+                <p>"أروع متجر تعاملت معه، التغليف يفتح النفس والتوصيل كان أسرع مما توقعت!"</p>
+                <strong>- أمينة، الجزائر</strong>
+            </div>
+            <div class="test-card">
+                <p>"الهدية وصلت تماماً مثل الصورة، شكراً على المصداقية والاحترافية في العمل."</p>
+                <strong>- يوسف، وهران</strong>
+            </div>
+            <div class="test-card">
+                <p>"بصراحة لمسة وردية اسم على مسمى، جودة المنتجات وتغليفكم خيالي."</p>
+                <strong>- مريم، قسنطينة</strong>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">لمسة وردية</div>
+        <div class="social-links">
+            <a href="https://facebook.com" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com" title="انستغرام"><i class="fab fa-instagram"></i></a>
+            <a href="https://tiktok.com" title="تيك توك"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p style="font-size: 0.9rem; color: #777;">جميع الحقوق محفوظة لمتجر لمسة وردية 2024</p>
+    </footer>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCart()">&times;</span>
+            <h2 style="color: var(--dark-pink); margin-bottom: 20px; text-align: center;">تأكيد الطلبية</h2>
+            <div id="itemsContainer" class="order-summary"></div>
+
+            <form action="https://formspree.io/f/xkowlope" method="POST">
+                <div class="form-group">
+                    <label>الاسم واللقب:</label>
+                    <input type="text" name="الاسم" required>
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف:</label>
+                    <input type="tel" name="الهاتف" required>
+                </div>
+                <div class="form-group">
+                    <label>الولاية:</label>
+                    <select name="الولاية" id="wilayaSelect" onchange="updatePrices()" required>
+                        <option value="">-- اختر الولاية --</option>
+                        <option value="Adrar" data-home="1300" data-office="970">01 - Adrar</option>
+                        <option value="Chlef" data-home="800" data-office="570">02 - Chlef</option>
+                        <option value="Laghouat" data-home="950" data-office="670">03 - Laghouat</option>
+                        <option value="Oum El Bouaghi" data-home="800" data-office="570">04 - Oum El Bouaghi</option>
+                        <option value="Batna" data-home="800" data-office="570">05 - Batna</option>
+                        <option value="Béjaïa" data-home="800" data-office="570">06 - Béjaïa</option>
+                        <option value="Biskra" data-home="950" data-office="670">07 - Biskra</option>
+                        <option value="Béchar" data-home="1250" data-office="770">08 - Béchar</option>
+                        <option value="Blida" data-home="600" data-office="470">09 - Blida</option>
+                        <option value="Bouira" data-home="750" data-office="570">10 - Bouira</option>
+                        <option value="Tamanrasset" data-home="1500" data-office="1120">11 - Tamanrasset</option>
+                        <option value="Tébessa" data-home="900" data-office="570">12 - Tébessa</option>
+                        <option value="Tlemcen" data-home="850" data-office="570">13 - Tlemcen</option>
+                        <option value="Tiaret" data-home="800" data-office="570">14 - Tiaret</option>
+                        <option value="Tizi Ouzou" data-home="850" data-office="570">15 - Tizi Ouzou</option>
+                        <option value="Alger" data-home="650" data-office="420">16 - Alger</option>
+                        <option value="Djelfa" data-home="850" data-office="570">17 - Djelfa</option>
+                        <option value="Jijel" data-home="800" data-office="570">18 - Jijel</option>
+                        <option value="Sétif" data-home="850" data-office="570">19 - Sétif</option>
+                        <option value="Saïda" data-home="850" data-office="520">20 - Saïda</option>
+                        <option value="Skikda" data-home="850" data-office="570">21 - Skikda</option>
+                        <option value="Sidi Bel Abbès" data-home="850" data-office="570">22 - Sidi Bel Abbès</option>
+                        <option value="Annaba" data-home="850" data-office="570">23 - Annaba</option>
+                        <option value="Guelma" data-home="850" data-office="570">24 - Guelma</option>
+                        <option value="Constantine" data-home="850" data-office="570">25 - Constantine</option>
+                        <option value="Médéa" data-home="500" data-office="370">26 - Médéa</option>
+                        <option value="Mostaganem" data-home="850" data-office="570">27 - Mostaganem</option>
+                        <option value="M'Sila" data-home="800" data-office="570">28 - M'Sila</option>
+                        <option value="Mascara" data-home="800" data-office="570">29 - Mascara</option>
+                        <option value="Ouargla" data-home="1000" data-office="670">30 - Ouargla</option>
+                        <option value="Oran" data-home="800" data-office="570">31 - Oran</option>
+                        <option value="El Bayadh" data-home="1000" data-office="670">32 - El Bayadh</option>
+                        <option value="Illizi" data-home="/" data-office="/">33 - Illizi</option>
+                        <option value="Bordj Bou Arreridj" data-home="800" data-office="570">34 - Bordj Bou Arreridj</option>
+                        <option value="Boumerdès" data-home="800" data-office="570">35 - Boumerdès</option>
+                        <option value="El Tarf" data-home="850" data-office="570">36 - El Tarf</option>
+                        <option value="Tindouf" data-home="/" data-office="/">37 - Tindouf</option>
+                        <option value="Tissemsilt" data-home="750" data-office="/">38 - Tissemsilt</option>
+                        <option value="El Oued" data-home="950" data-office="670">39 - El Oued</option>
+                        <option value="Khenchela" data-home="850" data-office="/">40 - Khenchela</option>
+                        <option value="Souk Ahras" data-home="850" data-office="570">41 - Souk Ahras</option>
+                        <option value="Tipaza" data-home="800" data-office="570">42 - Tipaza</option>
+                        <option value="Mila" data-home="850" data-office="570">43 - Mila</option>
+                        <option value="Aïn Defla" data-home="850" data-office="570">44 - Aïn Defla</option>
+                        <option value="Naâma" data-home="1200" data-office="670">45 - Naâma</option>
+                        <option value="Aïn Témouchent" data-home="850" data-office="570">46 - Aïn Témouchent</option>
+                        <option value="Ghardaïa" data-home="950" data-office="670">47 - Ghardaïa</option>
+                        <option value="Relizane" data-home="850" data-office="570">48 - Relizane</option>
+                        <option value="Timimoun" data-home="1400" data-office="/">49 - Timimoun</option>
+                        <option value="Bordj Badji Mokhtar" data-home="/" data-office="/">50 - Bordj Badji Mokhtar</option>
+                        <option value="Ouled Djellal" data-home="950" data-office="670">51 - Ouled Djellal</option>
+                        <option value="Béni Abbès" data-home="1400" data-office="970">52 - Béni Abbès</option>
+                        <option value="In Salah" data-home="1600" data-office="/">53 - In Salah</option>
+                        <option value="In Guezzam" data-home="1600" data-office="/">54 - In Guezzam</option>
+                        <option value="Touggourt" data-home="950" data-office="670">55 - Touggourt</option>
+                        <option value="Djanet" data-home="/" data-office="/">56 - Djanet</option>
+                        <option value="El M'Ghair" data-home="950" data-office="/">57 - El M'Ghair</option>
+                        <option value="El Meniaa" data-home="1000" data-office="/">58 - El Meniaa</option>
+                    </select>
+                    <span id="errorMsg" class="not-available">نعتذر، التوصيل غير متوفر لهذه الولاية.</span>
+                </div>
+                <div class="form-group">
+                    <label>نوع التوصيل:</label>
+                    <select name="نوع التوصيل" id="shipMethod" onchange="updatePrices()">
+                        <option value="home">إلى باب المنزل</option>
+                        <option value="office">إلى المكتب (Stop-Desk)</option>
+                    </select>
+                </div>
+
+                <div class="order-summary" style="background:#fefefe; border:1px solid #ddd; padding: 10px;">
+                    <div style="display:flex; justify-content:space-between;"><span>سعر السلع:</span><span id="itemsPriceDisp">0</span> دج</div>
+                    <div style="display:flex; justify-content:space-between; color:#666;"><span>سعر التوصيل:</span><span id="shipPriceDisp">0</span> دج</div>
+                    <div class="total-line"><span>الإجمالي:</span><span id="finalTotalDisp" style="color:var(--dark-pink);">0</span> دج</div>
+                </div>
+
+                <input type="hidden" name="الطلبات" id="hiddenCart">
+                <input type="hidden" name="المجموع النهائي" id="hiddenTotal">
+                <button type="submit" id="submitBtn" class="submit-order">إرسال الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: "بوكيه ورد جوري", price: 3500, img: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400" },
+            { id: 2, name: "بوكس هدايا فاخر", price: 5800, img: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400" },
+            { id: 3, name: "دبدوب كبير", price: 2900, img: "https://images.unsplash.com/photo-1559563362-c667ba5f5480?w=400" }
+        ];
+
+        let cart = [];
+        const grid = document.getElementById('productsGrid');
+        products.forEach(p => {
+            grid.innerHTML += `<div class="card"><img src="${p.img}"><h3>${p.name}</h3><span class="price">${p.price} دج</span><button class="add-btn" onclick="addToCart(${p.id})">أضف للسلة</button></div>`;
+        });
+
+        function addToCart(id) {
+            cart.push(products.find(p => p.id === id));
+            document.getElementById('cartCount').innerText = cart.length;
+            alert("تمت الإضافة!");
+        }
+
+        function openCart() {
+            if(cart.length === 0) return alert("السلة فارغة!");
+            const container = document.getElementById('itemsContainer');
+            let itemsPrice = 0, cartStr = "";
+            container.innerHTML = "<strong>سلتك:</strong><br>";
+            cart.forEach(item => {
+                container.innerHTML += `<div>${item.name} - ${item.price} دج</div>`;
+                itemsPrice += item.price; cartStr += item.name + ", ";
+            });
+            window.currentItemsPrice = itemsPrice;
+            document.getElementById('itemsPriceDisp').innerText = itemsPrice;
+            document.getElementById('hiddenCart').value = cartStr;
+            updatePrices();
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        function closeCart() { document.getElementById('cartModal').style.display = 'none'; }
+
+        function updatePrices() {
+            const wilaya = document.getElementById('wilayaSelect');
+            const method = document.getElementById('shipMethod').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            let shipPrice = 0;
+            let canShip = true;
+
+            if(wilaya.selectedIndex > 0) {
+                const opt = wilaya.options[wilaya.selectedIndex];
+                const priceValue = (method === 'home') ? opt.dataset.home : opt.dataset.office;
+                if(priceValue === "/") {
+                    canShip = false;
+                } else {
+                    shipPrice = parseInt(priceValue);
+                }
+            }
+
+            if(!canShip) {
+                submitBtn.disabled = true;
+                errorMsg.style.display = "block";
+                document.getElementById('shipPriceDisp').innerText = "--";
+                document.getElementById('finalTotalDisp').innerText = "--";
+            } else {
+                submitBtn.disabled = false;
+                errorMsg.style.display = "none";
+                const final = (window.currentItemsPrice || 0) + shipPrice;
+                document.getElementById('shipPriceDisp').innerText = shipPrice;
+                document.getElementById('finalTotalDisp').innerText = final;
+                document.getElementById('hiddenTotal').value = final + " دج";
+            }
+        }
+    </script>
+</body>
+</html>
